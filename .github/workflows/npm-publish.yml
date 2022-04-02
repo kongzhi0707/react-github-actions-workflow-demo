@@ -1,33 +1,37 @@
-# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
-# For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
-
-name: Node.js Package
-
+name: 打包项目
 on:
-  release:
-    types: [created]
+  push:   # 指定触发事件
+    branches:
+      - main    # 指定触发 action 的分支
 
 jobs:
-  build:
+  main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: npm test
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+    
+    # 拉取github仓库代码 这里需要将仓库代码检出到虚拟机实例中
+    - name: Chcekout
+      uses: actions/checkout@v2.3.1
+      with:
+        # 如果您正在使用actions/checkout@v2，那么在大多数情况下，您必须将持久凭证设置为false，才能使部署正确工作
+        persist-credentials: false
+    
+    # 执行依赖安装
+    - name: 安装依赖
+      run: |
+        npm install
+    
+    # 执行构建步骤
+    - name: 构建
+      run: |
+        npm run build
+    
+    # 执行部署
+    - name: 部署
+      # 详情看：https://www.npmjs.com/package/@jamesives/github-pages-deploy-action
+      uses: JamesIves/github-pages-deploy-action@releases/v3 # 这个action会根据配置自动推送代码到指定分支
+      with:
+        # 为了让 GitHub触发重新构建页面，您必须使用存储库提供的GitHub令牌来提供操作,
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} # 指定密钥，即在第一步中设置的
+        BRANCH: gh-pages  # 指定推送到远程分支
+        FOLDER: build  # 指定构建之后要推送那个目录的代码，这里react执行 npm run build 后会打包到 build 目录下，因此这里是 build 目录
