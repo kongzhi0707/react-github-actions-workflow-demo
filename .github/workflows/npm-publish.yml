@@ -2,7 +2,7 @@ name: 打包项目
 on:
   push:   # 指定触发事件
     branches:
-      - main    # 指定触发 action 的分支
+      - master    # 指定触发 action 的分支
 
 jobs:
   build_and_deploy:
