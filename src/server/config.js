@@ -32,7 +32,7 @@ export const getWidget = options => httpClient.request({
     cfg.headers['Accept'] = 'application/x-www-form-urlencoded';
     cfg.headers.common['Authorization'] = 'AUTH_TOKEN';
   },
-  // 响应拦截器回调函数
+  // 响应拦截器回调函数  
   responseCallBack(cfg) {
     // cfg.status = 404;
     console.log('---响应拦截器可以对返回的数据进行构造---', cfg);
