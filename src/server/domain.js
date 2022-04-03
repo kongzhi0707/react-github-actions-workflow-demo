@@ -1,2 +1,2 @@
 
-export const namespace = 'http://news.baidu.com';
+export const namespace = '//news.baidu.com';
