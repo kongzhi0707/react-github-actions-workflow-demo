@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { getWidget } from './server/config';
-import react, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 function App() {
   useEffect(() => {
