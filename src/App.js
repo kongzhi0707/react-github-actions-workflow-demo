@@ -1,7 +1,20 @@
 import logo from './logo.svg';
 import './App.css';
+import { getWidget } from './server/config';
+import react, { useEffect } from 'react';
 
 function App() {
+  useEffect(() => {
+    getWidget({
+      'id': 'LocalNews',
+      'ajax': 'json'
+    }).then((data) => {
+      console.log('data---');
+      console.log(data);
+    }).catch(err => {
+      console.log(err);
+    });
+  });
   return (
     <div className="App">
       <header className="App-header">
